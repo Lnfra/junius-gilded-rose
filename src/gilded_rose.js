@@ -85,19 +85,21 @@ function update_quality(items) {
 		}
 
     function increase_quality(unit){
-      unit = unit || 1
+      unit = unit || 1;
       //return the new inc val or 50 whichever is lower
       item.quality = Math.min(item.quality += unit, 50);
     }
 
-		function decrease_quality(times){
-			times = times || 1;
-			if (item.sell_in <= 0 && item.quality > 0) {
-				item.quality -= times * 2;
-			// else if the quality is greater than 0
-			} else if (item.quality > 0) {
-				item.quality -= times;
+		function decrease_quality(unit){
+      unit = unit || 1;
+			if (item.sell_in <= 0) {
+        //decrease by twice if sell in is less than or eq to 0
+				item.quality -= unit * 2;
+			} else {
+				item.quality -= unit;
 			}
+      //return the new dec val, or 0 whichever is higher
+      item.quality =  Math.max(item.quality, 0);
 		}
 
 		function update_sell_in(){
