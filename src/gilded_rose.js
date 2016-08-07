@@ -54,18 +54,26 @@ function update_quality(items) {
 				update_sell_in();
 				break;
 			case "Backstage passes to a TAFKAL80ETC concert":
-				increase_quality();
-				if (item.sell_in < 11) {
-					increase_quality();
-				}
-				if (item.sell_in < 6 ) {
-					increase_quality();
-				}
-				if (item.sell_in <= 0) {
-					item.quality = 0;
-				}
+
+        if(item.sell_in <= 0){
+          // quality drops to 0 after the concert
+          item.quality = 0;
+        }
+        else if(item.sell_in <= 5){
+          // quality inc by 3 when there are 5 days or less
+          increase_quality(3)
+        }
+        else if (item.sell_in <= 10){
+          // quality inc by 2 when there are 10 days or less
+          increase_quality(2);
+        }
+        else if(item.sell_in > 10){
+          // quality inc by 1 when sell_in > 10 days
+          increase_quality();
+        }
 				update_sell_in();
 				break;
+
 			case "Conjured":
 				// decrease quality by double the normal rate
 				decrease_quality(2);
@@ -76,12 +84,11 @@ function update_quality(items) {
 				update_sell_in();
 		}
 
-		// Further function declarations (closure)
-		function increase_quality(){
-			if (item.quality < 50) {
-				item.quality += 1;
-			}
-		}
+    function increase_quality(unit){
+      unit = unit || 1
+      //return the new inc val or 50 whichever is lower
+      item.quality = Math.min(item.quality += unit, 50);
+    }
 
 		function decrease_quality(times){
 			times = times || 1;
